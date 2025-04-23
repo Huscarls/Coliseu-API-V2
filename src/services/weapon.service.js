@@ -14,8 +14,16 @@ async function newWeapon(weapon){
   await repo.insertWeapon(weapon)
 }
 
+function createWeaponObject(id, name){
+  const weapon = {
+    id, name
+    }
+  return weapon
+}
+
 module.exports = {
   getAllWeapons,
   getWeaponById,
-  newWeapon
+  newWeapon,
+  createWeaponObject
 }

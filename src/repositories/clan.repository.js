@@ -22,7 +22,7 @@ async function getClanByFullName(full_name) {
 
 //TODO
 async function getClansWithEnabledPlayers() {
-  const query = `SELECT cl.full_name full_name, cl.id id FROM ${TABLE.clan} cl
+  const query = `SELECT cl.full_name full_name, cl.id id, cl.abbreviation abbreviation FROM ${TABLE.clan} cl
   INNER JOIN ${TABLE.swordplayer} swp on cl.id = swp.id_clan
   WHERE swp.is_enabled = true
   GROUP BY id_clan;`

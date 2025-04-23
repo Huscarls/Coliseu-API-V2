@@ -17,7 +17,7 @@ const creationQuery = {
     full_name VARCHAR(50) NOT NULL UNIQUE,
     nickname VARCHAR(30) NOT NULL,
     id_clan CHAR(36) NOT NULL,
-      FOREIGN KEY (id_clan) REFERENCES clans(id),
+      FOREIGN KEY (id_clan) REFERENCES clans(id) ON DELETE CASCADE,
     is_enabled BOOL NOT NULL DEFAULT TRUE,
     creation_timestamp DATETIME NOT NULL DEFAULT NOW()
 );`,
@@ -34,11 +34,11 @@ const creationQuery = {
     full_name VARCHAR(70) NOT NULL,
     nickname VARCHAR(30) NOT NULL,
     id_clan CHAR(36) NOT NULL,
-      FOREIGN KEY (id_clan) REFERENCES clans(id),
+      FOREIGN KEY (id_clan) REFERENCES clans(id) ON DELETE CASCADE,
     is_enabled BOOL NOT NULL DEFAULT TRUE,
     creation_timestamp DATETIME NOT NULL DEFAULT NOW(),
     id_creator CHAR(36),
-      FOREIGN KEY (id_creator) REFERENCES users(id)
+      FOREIGN KEY (id_creator) REFERENCES users(id) ON DELETE CASCADE
 );`,
 
   'weapons': `CREATE TABLE weapons (
@@ -49,19 +49,19 @@ const creationQuery = {
   'combats': `CREATE TABLE combats (
     id INT NOT NULL UNIQUE AUTO_INCREMENT PRIMARY KEY,
     id_swp1 INT NOT NULL,
-      FOREIGN KEY (id_swp1) REFERENCES swordplayers(id),
+      FOREIGN KEY (id_swp1) REFERENCES swordplayers(id) ON DELETE CASCADE,
     id_weapon1 INT NOT NULL,
-      FOREIGN KEY (id_weapon1) REFERENCES weapons(id),
+      FOREIGN KEY (id_weapon1) REFERENCES weapons(id) ON DELETE CASCADE,
     rounds_scored1 INT NOT NULL,
       CHECK (rounds_scored1 > -1),
     id_swp2 INT NOT NULL,
-      FOREIGN KEY (id_swp2) REFERENCES swordplayers(id),
+      FOREIGN KEY (id_swp2) REFERENCES swordplayers(id) ON DELETE CASCADE,
     id_weapon2 INT NOT NULL,
-      FOREIGN KEY (id_weapon2) REFERENCES weapons(id),
+      FOREIGN KEY (id_weapon2) REFERENCES weapons(id) ON DELETE CASCADE,
     rounds_scored2 INT NOT NULL,
       CHECK (rounds_scored2 > -1),
     id_creator CHAR(36),
-      FOREIGN KEY (id_creator) REFERENCES users(id),
+      FOREIGN KEY (id_creator) REFERENCES users(id) ON DELETE CASCADE,
     CHECK (id_swp1 < id_swp2)
 );`
 }

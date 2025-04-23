@@ -24,9 +24,8 @@ app.use("/swordplayer", swordplayerRoutes)
 const combatRoutes = require("./routes/combat.route.js")
 app.use("/combat", combatRoutes)
 
-//TODO
-// const weaponRoutes = require("./routes/weapon.route.js")
-// app.use("/weapon", weaponRoutes)
+const weaponRoutes = require("./routes/weapon.route.js")
+app.use("/weapon", weaponRoutes)
 
 app.get("/health", async (req, res) => {
   const healthData = {

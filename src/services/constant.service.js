@@ -3,6 +3,7 @@ const TABLE = {
   clan: "clans",
   user: "users",
   combat: "combats",
+  weapon:"weapons"
 }
 
 module.exports = {

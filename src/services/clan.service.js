@@ -45,5 +45,5 @@ module.exports = {
   getClansWithEnabledPlayers,
   newClan,
   editClan,
-  deleteClanById
+  deleteClanById,
 }
