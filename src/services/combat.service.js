@@ -55,19 +55,23 @@ async function getSwordplayerCombats(id_swordplayer){
   for(let i = 0; i < combats.length; i++){
     
   combats[i].swp1 = objService.createSwordplayerObject("", combats[i].nickname1, 1)
+  combats[i].swp1.id = combats[i].swp1id
   combats[i].swp1.clan = objService.createClanObject(combats[i].clan_name1, combats[i].clan_abbreviation1)
   combats[i].weapon1 = objService.createWeaponObject(combats[i].id_weapon1, combats[i].weapon_name1)
-
-  combats[i].swp2 = objService.createSwordplayerObject("", combats[i].nickname2, 1)
+  
+  combats[i].swp2 = objService.createSwordplayerObject(combats[i].swp2id, combats[i].nickname2, 1)
+  combats[i].swp2.id = combats[i].swp2id
   combats[i].swp2.clan = objService.createClanObject(combats[i].clan_name2, combats[i].clan_abbreviation2)
   combats[i].weapon2 = objService.createWeaponObject(combats[i].id_weapon2, combats[i].weapon_name2)
 
+  delete combats[i].swp1id
   delete combats[i].nickname1
   delete combats[i].clan_name1
   delete combats[i].clan_abbreviation1
   delete combats[i].id_weapon1
   delete combats[i].weapon_name1
   
+  delete combats[i].swp2id
   delete combats[i].nickname2
   delete combats[i].clan_name2
   delete combats[i].clan_abbreviation2

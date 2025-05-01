@@ -1,36 +1,41 @@
 const clanServ = require("../services/clan.service.js")
-const playerServ = require("../services/swordplayer.service.js")
-const combatServ = require("../services/combat.service.js")
 
 async function getAllClans(req, res) {
   try {
     const clans = await clanServ.getAllClans()
-    return res.status(200).json(clans)
+
+    const resObj = {data: clans}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json(resObj)
   } catch (err) {
     console.log(err)
     res.status(500).send()
   }
 }
 
-//TODO
 async function getClanById(req, res) {
   try {
     const { id } = req.params
     if (!id) return res.status(400).send()
     const clan = await clanServ.getClanById(id)
     if (!clan) return res.status(404).send()
-    return res.status(200).json(clan)
+
+    const resObj = {data: clan}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json(resObj)
   } catch (err) {
     console.log(err)
     res.status(500).send()
   }
 }
 
-//TODO
 async function getClansWithEnabledPlayers(req, res) {
   try {
     const clans = await clanServ.getClansWithEnabledPlayers()
-    return res.status(200).json(clans)
+
+    const resObj = {data: clans}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json(resObj)
   } catch (err) {
     console.log(err)
     res.status(500).send()
@@ -46,14 +51,16 @@ async function postClan(req, res) {
     if (foundClan) return res.status(409).send()
 
     await clanServ.newClan(full_name, abbreviation)
-    return res.status(201).json()
+
+    const resObj = {}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(201).json(resObj)
   } catch (err) {
     console.log(err)
     res.status(500).send()
   }
 }
 
-//TODO
 async function putClanById(req, res) {
   try {
     const { id } = req.params
@@ -61,7 +68,10 @@ async function putClanById(req, res) {
     const { full_name, abbreviation } = req.body
     if (!full_name || !abbreviation) return res.status(400).send()
     await clanServ.editClan(id, full_name, abbreviation)
-    return res.status(204).json()
+
+    const resObj = {}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(204).json(resObj)
   } catch (err) {
     console.log(err)
     res.status(500).send()
@@ -73,7 +83,10 @@ async function deleteClanById(req, res) {
     const { id } = req.params
     if (!id) return res.status(400).json({ message: "Insert a clan id" })
     await clanServ.deleteClanById(id)
-    res.status(204).json({ message: "Clan deleted with all respecives players and combats" })
+
+    const resObj = {}
+    if(req.newToken) resObj.token = req.newToken
+    res.status(204).json(resObj)
   } catch (err) {
     console.log(err)
     res.status(500).send()

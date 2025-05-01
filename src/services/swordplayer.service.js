@@ -59,7 +59,6 @@ async function getSwordplayersAndCombatCount() {
     swordplayers[i].stats = objService.createSwordplayerStatsObject(swordplayers[i].combatsDone)
     delete swordplayers[i].combatsDone
   }
-  console.log(swordplayers)
   return swordplayers
 }
 

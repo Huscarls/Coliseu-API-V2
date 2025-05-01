@@ -14,7 +14,7 @@ INNER JOIN clans cl2 ON swp2.id_clan = cl2.id;`
 }
 
 async function getSwordplayerCombats(id_swp){
-  const query = `SELECT c1.full_name clan_name1, c1.abbreviation clan_abbreviation1, swp1.nickname nickname1, cbt.rounds_scored1 roundsScored1, c2.full_name clan_name2, c2.abbreviation clan_abbreviation2, swp2.nickname nickname2, cbt.rounds_scored2 roundsScored2 FROM ${TABLE.combat} cbt
+  const query = `SELECT c1.full_name clan_name1, c1.abbreviation clan_abbreviation1, swp1.id swp1id, swp1.nickname nickname1, cbt.rounds_scored1 roundsScored1, c2.full_name clan_name2, c2.abbreviation clan_abbreviation2, swp2.id swp2id, swp2.nickname nickname2, cbt.rounds_scored2 roundsScored2 FROM ${TABLE.combat} cbt
   INNER JOIN swordplayers swp1 ON cbt.id_swp1 = swp1.id
   INNER JOIN swordplayers swp2 ON cbt.id_swp2 = swp2.id
   INNER JOIN clans c1 ON c1.id = swp1.id_clan

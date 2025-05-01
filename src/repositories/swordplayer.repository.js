@@ -11,14 +11,12 @@ async function getAllPlayers(){
 }
 
 async function getEnabledSwordplayers() {
-  const query = `SELECT swp.id id, swp.nickname nickname, swp.full_name full_name, cl.abbreviation clan_abbreviation, cl.full_name cl_name FROM ${TABLE.swordplayer} swp
+  const query = `SELECT swp.id id, swp.nickname nickname, swp.full_name full_name, cl.abbreviation clan_abbreviation, cl.full_name clan_name FROM ${TABLE.swordplayer} swp
   INNER JOIN ${TABLE.clan} cl ON swp.id_clan = cl.id
   WHERE swp.is_enabled = true`
   const [swordplayers, _] = await db.query(query)
   return swordplayers
 }
-
-
 
 async function getEnabledPlayersByClan(id_clan){
   const query = `SELECT swp.id id, swp.nickname nickname FROM ${TABLE.swordplayer} swp
@@ -26,7 +24,6 @@ async function getEnabledPlayersByClan(id_clan){
   const [swordplayers, _] = await db.query(query, [id_clan])
   return swordplayers
 }
-
 
 //TODO
 async function getPlayersFullInfoById(id){

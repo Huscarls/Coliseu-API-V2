@@ -1,9 +1,9 @@
 const bcrypt = require("bcrypt")
 
-const SALT = Number(process.env.SALT)
+const SECRET = Number(process.env.SECRET)
 
 function hashPassword(password){
-  const hashedPassword = bcrypt.hashSync(password,SALT
+  const hashedPassword = bcrypt.hashSync(password,SECRET
     , (err, hash)=> {return hash})
   return hashedPassword
 }

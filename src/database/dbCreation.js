@@ -1,6 +1,6 @@
 const { db } = require("./dbConnect.js")
 
-const TABLES = ["clans", "users", "swordplayers", "weapons", "combats"]
+const TABLES = ["clans", "users", "sessions", "swordplayers", "weapons", "combats"]
 
 async function getAllNames(){
   
@@ -12,14 +12,24 @@ async function getAllNames(){
 
 const creationQuery = {
 
+  "sessions": `CREATE TABLE sessions (
+    id_user CHAR(36) NOT NULL,
+      FOREIGN KEY (id_user) REFERENCES users(id),
+    token VARCHAR(512) NOT NULL
+  );`,
+
   'users': `CREATE TABLE users (
 	id CHAR(36) NOT NULL UNIQUE PRIMARY KEY,
-    full_name VARCHAR(50) NOT NULL UNIQUE,
-    nickname VARCHAR(30) NOT NULL,
+  password_hash CHAR(60) NOT NULL,
+    full_name VARCHAR(50) NOT NULL,
+    username VARCHAR(30) NOT NULL UNIQUE,
     id_clan CHAR(36) NOT NULL,
       FOREIGN KEY (id_clan) REFERENCES clans(id) ON DELETE CASCADE,
     is_enabled BOOL NOT NULL DEFAULT TRUE,
-    creation_timestamp DATETIME NOT NULL DEFAULT NOW()
+    creation_timestamp DATETIME NOT NULL DEFAULT NOW(),
+    is_leader BOOL NOT NULL DEFAULT FALSE,
+    is_staff BOOL NOT NULL DEFAULT FALSE,
+    is_admin BOOL NOT NULL DEFAULT FALSE
 );`,
 
   'clans': `CREATE TABLE clans (

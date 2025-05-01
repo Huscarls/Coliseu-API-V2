@@ -6,7 +6,10 @@ const clanServ = require("../services/clan.service.js")
 async function getAllPlayers(req, res) {
   try {
     const swordplayers = await swordplayerServ.getAllPlayers()
-    return res.status(200).json( swordplayers )
+
+    const resObj = {data: swordplayers}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json( resObj )
   } catch (err) {
     return res.status(500).json(err.message)
   }
@@ -15,7 +18,10 @@ async function getAllPlayers(req, res) {
 async function getEnabledSwordplayers(req, res) {
   try {
     const swordplayers = await swordplayerServ.getEnabledSwordplayers()
-    return res.status(200).json( swordplayers )
+
+    const resObj = {data: swordplayers}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json( resObj )
   } catch (err) {
     console.log(err)
     res.status(500).json(err.message)
@@ -26,7 +32,10 @@ async function getEnabledPlayersByClan(req, res) {
   try {
     const { id_clan } = req.params
     const swordplayers = await swordplayerServ.getEnabledPlayersByClan(id_clan)
-    return res.status(200).json( swordplayers )
+
+    const resObj = {data: swordplayers}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json( resObj )
   } catch (err) {
     res.status(500).json(err.message)
   }
@@ -35,9 +44,12 @@ async function getEnabledPlayersByClan(req, res) {
 async function getPlayerById(req, res) {
   try {
     const { id } = req.params
-    const player = await swordplayerServ.getPlayerById(id)
-    if(!player) return res.status(400).send()
-    return res.status(200).json( player )
+    const swordplayer = await swordplayerServ.getPlayerById(id)
+    if(!swordplayer) return res.status(400).send()
+
+    const resObj = {data: swordplayer}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json( resObj )
   } catch (err) {
     res.status(500).json(err.message)
   }
@@ -47,8 +59,11 @@ async function getPlayerById(req, res) {
 async function getPlayerFullInfoById(req, res){
   try{
     const { id } = req.params
-    const player = await swordplayerServ.getPlayersFullInfoById(id)
-    return res.status(200).json( player )
+    const swordplayer = await swordplayerServ.getPlayersFullInfoById(id)
+
+    const resObj = {data: swordplayer}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json( resObj )
   } catch (err) {
     res.status(500).json(err.message)
   }
@@ -58,8 +73,11 @@ async function getPlayerFullInfoById(req, res){
 async function getPlayersByClanId(req, res) {
   try {
     const { id_clan } = req.params
-    const players = await swordplayerServ.getPlayersByClanId(id_clan)
-    return res.status(200).json( players )
+    const swordplayer = await swordplayerServ.getPlayersByClanId(id_clan)
+
+    const resObj = {data: swordplayer}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json( resObj )
   } catch (err) {
     res.status(500).json(err.message)
   }
@@ -72,7 +90,10 @@ async function postPlayer(req, res) {
     const findClan = await clanServ.getClanById(clanId)
     if (!findClan) return res.status(400).send()
     await swordplayerServ.newPlayer(full_name, nickname, clanId)
-    return res.status(201).send()
+
+    const resObj = {}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(201).json(resObj)
   } catch (err) {
     console.log(err)
     res.status(500).json("Erro no servidor")
@@ -88,7 +109,10 @@ async function putPlayerById(req, res) {
     const findPlayer = await swordplayerServ.getPlayerById(id)
     if(!findPlayer) return res.status(404).send()
     await swordplayerServ.updatePlayerById(id, idClan, full_name, nickname)
-    return res.status(200).send()
+
+    const resObj = {}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json(resObj)
   } catch (err) {
     console.log(err)
     res.status(500).json(err.message)
@@ -100,7 +124,10 @@ async function enablePlayerById(req, res) {
     const { id } = req.body
     if(!id) return res.status(400).send()
     await swordplayerServ.enablePlayerById(id)
-    return res.status(200).send()
+
+    const resObj = {}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json(resObj)
   } catch (err) {
     res.status(500).json(err.message)
   }
@@ -111,7 +138,10 @@ async function disablePlayerById(req, res) {
     const { id } = req.body
     if(!id) return res.status(400).send()
     await swordplayerServ.disablePlayerById(id)
-    return res.status(200).send()
+
+    const resObj = {}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json(resObj)
   } catch (err) {
     res.status(500).json(err.message)
   }
@@ -121,7 +151,10 @@ async function deletePlayerById(req, res) {
   try {
     const { id } = req.params
     await swordplayerServ.deletePlayerById(id)
-    return res.status(200).send()
+
+    const resObj = {}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json(resObj)
   } catch (err) {
     res.status(500).json(err.message)
   }
@@ -130,7 +163,10 @@ async function deletePlayerById(req, res) {
 async function getSwordplayersAndCombatCount(req, res) {
   try {
     const swordplayers = await swordplayerServ.getSwordplayersAndCombatCount() 
-    return res.status(200).json(swordplayers)
+
+    const resObj = {data: swordplayers}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json(resObj)
   } catch (err) {
     console.log(err)
     res.status(500).json(err.message)
