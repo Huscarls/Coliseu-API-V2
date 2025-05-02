@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken")
 const SECRET = process.env.SECRET;
 
 function getToken(userId){
-  const token = jwt.sign({userId}, SECRET, {expiresIn: 3600})
+  const token = jwt.sign({userId}, SECRET, {expiresIn: 300})
   return token
 }
 
@@ -30,6 +30,10 @@ async function logoffAllSessions(userId) {
   await repo.deleteSessionsFromUser(userId)
 }
 
+async function logout(token) {
+  await repo.deleteSessionFromToken(token)
+}
+
 async function updateToken(userId, oldToken, newToken) {
   await repo.updateSession(userId, oldToken, newToken)
 }
@@ -40,5 +44,6 @@ module.exports = {
   registerToken,
   validatePreviousSession,
   logoffAllSessions,
-  updateToken
+  updateToken,
+  logout
 }

@@ -33,7 +33,37 @@ async function getUsers(req, res) {
   }
 }
 
+async function enableUserById(req, res) {
+  try {
+    const { id } = req.body
+    if(!id) return res.status(400).send()
+    await userServ.enableUserById(id)
+
+    const resObj = {}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json(resObj)
+  } catch (err) {
+    res.status(500).json(err.message)
+  }
+}
+
+async function disableUserById(req, res) {
+  try {
+    const { id } = req.body
+    if(!id) return res.status(400).send()
+    await userServ.disableUserById(id)
+
+    const resObj = {}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json(resObj)
+  } catch (err) {
+    res.status(500).json(err.message)
+  }
+}
+
 module.exports = {
   createUser,
-  getUsers
+  getUsers,
+  enableUserById,
+  disableUserById
 }

@@ -79,11 +79,12 @@ async function deletePlayerById(id){
 }
 
 async function getSwordplayersAndCombatCount() {
-  const query = `SELECT swp.id id, swp.nickname nickname, COUNT(swp.id) combatsDone, cl.abbreviation clan_abbreviation, cl.full_name clan_name, swp.full_name full_name FROM ${TABLE.swordplayer} swp
-    INNER JOIN ${TABLE.clan} cl ON cl.id = swp.id_clan
-    LEFT JOIN ${TABLE.combat} cbt ON cbt.id_swp1=swp.id OR cbt.id_swp2=swp.id
-    GROUP BY swp.id
-    ORDER BY combatsDone DESC;`
+  const query = `SELECT swp.id id, swp.nickname nickname, COALESCE(ls.combatsDone, 0) combatsDone, cl.abbreviation clan_abbreviation, cl.full_name clan_name, swp.full_name full_name
+  
+  FROM swordplayers swp 
+LEFT JOIN (SELECT id_swp, COUNT(*) AS combatsDone FROM (SELECT id_swp1 AS id_swp FROM combats UNION ALL SELECT id_swp2 AS id_swp FROM combats) AS all_matches GROUP BY id_swp) ls ON swp.id = ls.id_swp
+INNER JOIN clans cl ON swp.id_clan = cl.id
+ORDER BY combatsDone DESC;`
   const [swordplayers, _] = await db.query(query)
   return swordplayers
 }

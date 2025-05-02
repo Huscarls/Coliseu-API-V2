@@ -3,18 +3,19 @@ const sessionServ = require("../services/session.service.js")
 
 async function validateSession(req, res, next){
   const bearer = req.headers["authorization"]
-  if(!bearer) return res.status(401).send()
+  if(!bearer) return res.status(401).json({})
   const token = bearer.split(" ")[1]
+  if(!token) return res.status(401).json({})
   const userId = req.headers["user-id"]
   req.userId = userId
   const validToken = sessionServ.validateToken(token)
   if(validToken) return next()
 
-  // const session = await sessionServ.validatePreviousSession(userId, token)
-  // if(!session) {
-  //   await sessionServ.logoffAllSessions(userId)
-  //   return res.status(401).send()
-  // }
+  const session = await sessionServ.validatePreviousSession(userId, token)
+  if(!session) {
+    await sessionServ.logoffAllSessions(userId)
+    return res.status(401).json({})
+  }
 
   const newToken = sessionServ.getToken(userId)
   await sessionServ.updateToken(userId, token, newToken)

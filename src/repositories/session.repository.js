@@ -7,7 +7,10 @@ async function insertToken(userId, token) {
 }
 
 async function findSession(userId, token) {
-  const query = `SELECT * FROM ${TABLE.session} WHERE id_user=? AND token=?`
+  const query = `SELECT * FROM ${TABLE.session} ses
+  JOIN ${TABLE.user} us ON ses.id_user = us.id
+  WHERE ses.id_user=? AND ses.token=? AND us.is_enabled=TRUE
+  ;`
   const [session, _] = await db.query(query, [userId, token])
   return session[0]
 }
@@ -15,6 +18,12 @@ async function findSession(userId, token) {
 async function deleteSessionsFromUser(userId) {
   const query = `DELETE FROM ${TABLE.session} WHERE id_user=?`
   await db.query(query, [userId])
+}
+
+async function deleteSessionFromToken(token) {
+  const query = `DELETE FROM ${TABLE.session} WHERE token=?`
+  await db.query(query, [token])
+  
 }
 
 async function updateSession(userId, oldToken, newToken) {
@@ -26,5 +35,6 @@ module.exports = {
   insertToken,
   findSession,
   deleteSessionsFromUser,
-  updateSession
+  updateSession,
+  deleteSessionFromToken
 }

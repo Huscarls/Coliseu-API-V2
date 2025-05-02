@@ -10,14 +10,30 @@ async function insertUser(id, username, passwordHash, full_name, id_clan){
 }
 
 async function selectUserByUsername(username) {
-  const query = `SELECT id, password_hash FROM ${TABLE.user} WHERE username=? AND is_enabled=TRUE`
+  const query = `SELECT id, password_hash, is_leader, is_staff, is_admin, id_clan FROM ${TABLE.user}
+  WHERE username=? AND is_enabled=TRUE`
   const [users, _] = await db.query(query, [username])
   return users[0]
 }
 
+async function selectAllUsers() {
+  const query = `SELECT us.id id, us.full_name full_name, us.username username, us.is_enabled is_enabled, us.is_leader is_leader, us.is_staff is_staff, is_admin, cl.full_name clan_name, cl.abbreviation clan_abbreviation FROM ${TABLE.user} us
+                INNER JOIN ${TABLE.clan} cl ON cl.id = us.id_clan`
+  const [users, _] = await db.query(query)
+  return users
+}
+
+async function updateUserStatusById(id, status){
+  const query = `UPDATE ${TABLE.user} SET is_enabled = ? WHERE id = ?`
+  await db.query(query, [status, id])
+  return
+}
+
 module.exports = {
   selectUserByUsername,
-  insertUser
+  insertUser,
+  selectAllUsers,
+  updateUserStatusById
 }
 
 
