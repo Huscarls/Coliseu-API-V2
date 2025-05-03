@@ -15,6 +15,18 @@ async function getAllPlayers(req, res) {
   }
 }
 
+async function getAllSwordplayersWithFullClanInfo(req, res) {
+  try {
+    const swordplayers = await swordplayerServ.getAllSwordplayersWithFullClanInfo()
+
+    const resObj = {data: swordplayers}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json( resObj )
+  } catch (err) {
+    return res.status(500).json(err.message)
+  }
+}
+
 async function getEnabledSwordplayers(req, res) {
   try {
     const swordplayers = await swordplayerServ.getEnabledSwordplayers()
@@ -185,5 +197,6 @@ module.exports = {
   disablePlayerById,
   deletePlayerById,
   getSwordplayersAndCombatCount,
-  getEnabledSwordplayers
+  getEnabledSwordplayers,
+  getAllSwordplayersWithFullClanInfo
 }

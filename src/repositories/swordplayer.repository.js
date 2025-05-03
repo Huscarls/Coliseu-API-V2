@@ -25,13 +25,11 @@ async function getEnabledPlayersByClan(id_clan){
   return swordplayers
 }
 
-//TODO
-async function getPlayersFullInfoById(id){
-  const query = `SELECT swp.id, swp.full_name full_name, swp.nickname nickname, cl.full_name clan_name, swp.is_enabled is_enabled FROM ${TABLE.swordplayer} swp
-  INNER JOIN ${TABLE.clan} cl ON cl.id = swp.id_clan
-  WHERE swp.id = ?;`
-  const [swordplayers, _] = await db.query(query, [id])
-  return swordplayers[0]
+async function getAllSwordplayersWithFullClanInfo(){
+  const query = `SELECT swp.id id, swp.nickname nickname, swp.is_enabled is_enabled, swp.full_name full_name, swp.id_clan clan_id, cl.full_name clan_name, cl.abbreviation clan_abbreviation FROM ${TABLE.swordplayer} swp
+  INNER JOIN ${TABLE.clan} cl ON cl.id = swp.id_clan;`
+  const [swordplayers, _] = await db.query(query)
+  return swordplayers
 }
 
 async function getPlayerById(id){
@@ -80,11 +78,10 @@ async function deletePlayerById(id){
 
 async function getSwordplayersAndCombatCount() {
   const query = `SELECT swp.id id, swp.nickname nickname, COALESCE(ls.combatsDone, 0) combatsDone, cl.abbreviation clan_abbreviation, cl.full_name clan_name, swp.full_name full_name
-  
-  FROM swordplayers swp 
-LEFT JOIN (SELECT id_swp, COUNT(*) AS combatsDone FROM (SELECT id_swp1 AS id_swp FROM combats UNION ALL SELECT id_swp2 AS id_swp FROM combats) AS all_matches GROUP BY id_swp) ls ON swp.id = ls.id_swp
-INNER JOIN clans cl ON swp.id_clan = cl.id
-ORDER BY combatsDone DESC;`
+  FROM ${TABLE.swordplayer} swp 
+  LEFT JOIN (SELECT id_swp, COUNT(*) AS combatsDone FROM (SELECT id_swp1 AS id_swp FROM combats UNION ALL SELECT id_swp2 AS id_swp FROM combats) AS all_matches GROUP BY id_swp) ls ON swp.id = ls.id_swp
+  INNER JOIN ${TABLE.clan} cl ON swp.id_clan = cl.id
+  ORDER BY combatsDone DESC;`
   const [swordplayers, _] = await db.query(query)
   return swordplayers
 }
@@ -92,7 +89,7 @@ ORDER BY combatsDone DESC;`
 module.exports = {
   getAllPlayers,
   getEnabledPlayersByClan,
-  getPlayersFullInfoById,
+  getAllSwordplayersWithFullClanInfo,
   getPlayerById,
   getPlayersByClanId,
   insertPlayer,
@@ -101,5 +98,5 @@ module.exports = {
   disablePlayerById,
   deletePlayerById,
   getSwordplayersAndCombatCount,
-  getEnabledSwordplayers
+  getEnabledSwordplayers,
 }

@@ -8,6 +8,7 @@ const route = require("express").Router()
 route.get("/combat-count", controller.getSwordplayersAndCombatCount)
 route.get("/enabled-swordplayers", controller.getEnabledSwordplayers)
 route.get("/enabled-swordplayers/:id_clan", validateSession, controller.getEnabledPlayersByClan)
+route.get("/stats", controller.getAllSwordplayersWithFullClanInfo)
 route.get("/:id", controller.getPlayerById)
 route.get("/", controller.getAllPlayers)
 

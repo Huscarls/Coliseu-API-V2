@@ -7,13 +7,17 @@ async function getAllCombats(){
     combats[i].weapon1 = objService.createWeaponObject(0, combats[i].wpName1)
     combats[i].weapon2 = objService.createWeaponObject(0, combats[i].wpName2)
 
-    combats[i].swp1 = objService.createSwordplayerObject("", combats[i].nickname1, 1)
-    combats[i].swp2 = objService.createSwordplayerObject("", combats[i].nickname2, 1)
+    combats[i].swp1 = objService.createSwordplayerObject("", combats[i].nickname1, 1, combats[i].id_swp1)
+    combats[i].swp2 = objService.createSwordplayerObject("", combats[i].nickname2, 1, combats[i].id_swp2)
+
     combats[i].swp1.clan = objService.createClanObject("", combats[i].clanAbbreviation1)
     combats[i].swp2.clan = objService.createClanObject("", combats[i].clanAbbreviation2)
 
     delete combats[i].wpName1
     delete combats[i].wpName2
+
+    delete combats[i].id_swp1
+    delete combats[i].id_swp2
 
     delete combats[i].nickname1
     delete combats[i].nickname2

@@ -62,6 +62,17 @@ async function getSwordplayersAndCombatCount() {
   return swordplayers
 }
 
+async function getAllSwordplayersWithFullClanInfo() {
+  const swordplayers = await repo.getAllSwordplayersWithFullClanInfo()
+  for(let i = 0; i < swordplayers.length; i++) {
+    swordplayers[i].clan = objService.createClanObject(swordplayers[i].clan_name, swordplayers[i].clan_abbreviation, swordplayers[i].clan_id)
+    delete swordplayers[i].clan_id
+    delete swordplayers[i].clan_name
+    delete swordplayers[i].clan_abbreviation
+  }
+  return swordplayers
+}
+
 async function newPlayer(full_name, nickname, id_clan){
   await repo.insertPlayer(full_name, nickname, id_clan)
   return
@@ -99,5 +110,6 @@ module.exports = {
   disablePlayerById,
   deletePlayerById,
   getSwordplayersAndCombatCount,
-  getEnabledSwordplayers
+  getEnabledSwordplayers,
+  getAllSwordplayersWithFullClanInfo
 }
