@@ -40,8 +40,8 @@ async function getPlayerById(id){
   return swordplayers[0]
 }
 
-async function getPlayersByClanId(id_clan){
-  const query = `SELECT id, nickname, is_enabled FROM ${TABLE.swordplayer} WHERE id_clan = ?;`
+async function selectSwordplayersByClanId(id_clan){
+  const query = `SELECT id, full_name, nickname, is_enabled, id_clan FROM ${TABLE.swordplayer} WHERE id_clan = ?;`
   const [swordplayers, _] = await db.query(query, [id_clan])
   return swordplayers
 }
@@ -91,7 +91,7 @@ module.exports = {
   getEnabledPlayersByClan,
   getAllSwordplayersWithFullClanInfo,
   getPlayerById,
-  getPlayersByClanId,
+  selectSwordplayersByClanId,
   insertPlayer,
   updatePlayerById,
   enablePlayerById,

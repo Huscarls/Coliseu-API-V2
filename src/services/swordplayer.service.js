@@ -43,9 +43,13 @@ async function getPlayerById(id){
   return swordplayer
 }
 
-async function getPlayersByClanId(id_clan){
-  const swordplayer = await repo.getPlayersByClanId(id_clan)
-  return swordplayer
+async function getSwordplayersByClanId(id_clan){
+  const swordplayers = await repo.selectSwordplayersByClanId(id_clan)
+  for(let i = 0; i < swordplayers.length; i++) {
+    swordplayers[i].clan = {id: swordplayers[i].id_clan}
+    delete swordplayers[i].id_clan
+  }
+  return swordplayers
 }
 
 async function getSwordplayersAndCombatCount() {
@@ -103,7 +107,7 @@ module.exports = {
   getEnabledPlayersByClan,
   getPlayersFullInfoById,
   getPlayerById,
-  getPlayersByClanId,
+  getSwordplayersByClanId,
   newPlayer,
   updatePlayerById,
   enablePlayerById,

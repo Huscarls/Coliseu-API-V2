@@ -45,16 +45,31 @@ async function getAllCombatsFromPlayer(req, res) {
 async function getCombatByPlayers(req, res) {
   try {
     const { idSwp1, idSwp2 } = req.query
-    if (!idSwp1) return res.status(400).json({ message: "Please insert an idSwp1", error: "No idSwp1" })
-    if (!idSwp2) return res.status(400).json({ message: "Please insert an idSwp2", error: "No idSwp2" })
+    if (!idSwp1) return res.status(400).json()
+    if (!idSwp2) return res.status(400).json()
     const combat = await combatServ.getCombatByPlayers(idSwp1, idSwp2)
-    if (!combat) return res.status(404).json({ message: "Combat not found", error: "No combat found" })
+    if (!combat) return res.status(404).json()
 
     const resObj = {data: combat}
     if(req.newToken) resObj.token = req.newToken
     return res.status(200).json(resObj)
   } catch (err) {
     res.status(500).json(err.message)
+  }
+}
+
+async function getCombatsByClanId(req, res) {
+  try {
+    const { id_clan } = req.params
+    if(!id_clan) return res.status(400).json()
+    
+    const combat = await combatServ.getCombatsByClanId(id_clan)
+    const resObj = {data: combat}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json(resObj)
+
+  } catch (err) {
+    
   }
 }
 
@@ -113,5 +128,6 @@ module.exports = {
   postCombat,
   patchCombatById,
   deleteCombatById,
-  getCombatById
+  getCombatById,
+  getCombatsByClanId
 }

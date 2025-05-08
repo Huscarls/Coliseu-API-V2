@@ -67,27 +67,12 @@ async function getPlayerById(req, res) {
   }
 }
 
-//TODO
-async function getPlayerFullInfoById(req, res){
-  try{
-    const { id } = req.params
-    const swordplayer = await swordplayerServ.getPlayersFullInfoById(id)
-
-    const resObj = {data: swordplayer}
-    if(req.newToken) resObj.token = req.newToken
-    return res.status(200).json( resObj )
-  } catch (err) {
-    res.status(500).json(err.message)
-  }
-}
-
-//TODO
-async function getPlayersByClanId(req, res) {
+async function getSwordplayersByClanId(req, res) {
   try {
     const { id_clan } = req.params
-    const swordplayer = await swordplayerServ.getPlayersByClanId(id_clan)
+    const swordplayers = await swordplayerServ.getSwordplayersByClanId(id_clan)
 
-    const resObj = {data: swordplayer}
+    const resObj = {data: swordplayers}
     if(req.newToken) resObj.token = req.newToken
     return res.status(200).json( resObj )
   } catch (err) {
@@ -189,8 +174,6 @@ module.exports = {
   getAllPlayers,
   getEnabledPlayersByClan,
   getPlayerById,
-  getPlayerFullInfoById,
-  getPlayersByClanId,
   postPlayer,
   putPlayerById,
   enablePlayerById,
@@ -198,5 +181,6 @@ module.exports = {
   deletePlayerById,
   getSwordplayersAndCombatCount,
   getEnabledSwordplayers,
-  getAllSwordplayersWithFullClanInfo
+  getAllSwordplayersWithFullClanInfo,
+  getSwordplayersByClanId
 }

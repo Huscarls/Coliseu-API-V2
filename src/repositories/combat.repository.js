@@ -44,6 +44,15 @@ async function getCombatById(id){
   return combats[0]
 }
 
+async function getCombatsByClan(idClan) {
+  const query = `SELECT cbt.id id, swp1.id swp1id, cbt.rounds_scored1 roundsScored1, swp1.is_enabled is_enabled1 , swp2.id swp2id , cbt.rounds_scored2 roundsScored2, swp2.is_enabled is_enabled2 FROM ${TABLE.combat} cbt
+  INNER JOIN ${TABLE.swordplayer} swp1 ON cbt.id_swp1 = swp1.id
+  INNER JOIN ${TABLE.swordplayer} swp2 ON cbt.id_swp2 = swp2.id
+  WHERE swp1.id_clan = ? OR swp2.id_clan = ?;`
+  const [combats, _] = await db.query(query, [idClan, idClan])
+  return combats
+}
+
 async function insertCombat(id_swp1, id_weapon1, rounds_scored1, id_swp2, id_weapon2, rounds_scored2){
   const query = `INSERT combats (id_swp1, id_weapon1, rounds_scored1, id_swp2, id_weapon2, rounds_scored2)
   VALUES (?, ?, ?, ?, ?, ?)`
@@ -63,13 +72,6 @@ async function deleteCombatById(id){
   return
 }
 
-// TODO
-async function deleteCombatsBySwordplayerId(id_swp){
-  const query = `DELETE FROM ${TABLE.combat} WHERE id_swp1 = ? OR id_swp2 = ?;`
-  await db.query(query, [id_swp, id_swp])
-  return
-}
-
 module.exports = {
   getAllCombats,
   getSwordplayerCombats,
@@ -78,5 +80,5 @@ module.exports = {
   insertCombat,
   updateCombatById,
   deleteCombatById,
-  deleteCombatsBySwordplayerId
+  getCombatsByClan
 }
