@@ -7,7 +7,7 @@ async function login(req, res) {
   try {
     const { username, password } = req.body
     if (!username || !password) return res.status(400).json({ message: "Missing information" })
-    const foundUser = await userServ.findUser(username)
+    const foundUser = await userServ.findUserByUsername(username)
     if(!foundUser) return res.status(404).send()
 
     const correctPassword = authServ.verifyPassword(password, foundUser.password_hash)

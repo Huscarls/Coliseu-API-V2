@@ -1,12 +1,14 @@
 const controller = require("../controllers/user.controller.js")
 
+const { isAdmin } = require("../middleware/checkSession.middleware.js")
+
 const route = require("express").Router()
 
-route.get("/", controller.getUsers)
+route.get("/", isAdmin, controller.getUsers)
 
-route.post("/new", controller.createUser)
+route.post("/new", isAdmin, controller.createUser)
 
-route.patch("/enable", controller.enableUserById)
-route.patch("/disable", controller.disableUserById)
+route.patch("/enable", isAdmin, controller.enableUserById)
+route.patch("/disable", isAdmin, controller.disableUserById)
 
 module.exports = route

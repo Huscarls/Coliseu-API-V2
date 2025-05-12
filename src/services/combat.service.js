@@ -58,11 +58,11 @@ async function getSwordplayerCombats(id_swordplayer){
   const combats = await repo.getSwordplayerCombats(id_swordplayer)
   for(let i = 0; i < combats.length; i++){
     
-  combats[i].swp1 = objService.createSwordplayerObject("", combats[i].nickname1, combats[i].swp1id)
+  combats[i].swp1 = objService.createSwordplayerObject("", combats[i].nickname1, 1, combats[i].swp1id)
   combats[i].swp1.clan = objService.createClanObject(combats[i].clan_name1, combats[i].clan_abbreviation1)
   combats[i].weapon1 = objService.createWeaponObject(combats[i].id_weapon1, combats[i].weapon_name1)
   
-  combats[i].swp2 = objService.createSwordplayerObject(combats[i].swp2id, combats[i].nickname2, combats[i].swp2id)
+  combats[i].swp2 = objService.createSwordplayerObject("", combats[i].nickname2, 1, combats[i].swp2id)
   combats[i].swp2.clan = objService.createClanObject(combats[i].clan_name2, combats[i].clan_abbreviation2)
   combats[i].weapon2 = objService.createWeaponObject(combats[i].id_weapon2, combats[i].weapon_name2)
 

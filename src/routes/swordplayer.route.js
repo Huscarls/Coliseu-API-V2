@@ -1,24 +1,24 @@
 const controller = require("../controllers/swordplayer.controller.js")
 
-const { validateSession } = require("../middleware/checkSession.middleware.js")
+const { validateSession, isStaff, isAdmin, isLeader } = require("../middleware/checkSession.middleware.js")
 const route = require("express").Router()
 
-route.get("/clan/:id_clan", validateSession, controller.getSwordplayersByClanId)
+route.get("/clan/:id_clan", validateSession, isLeader, controller.getSwordplayersByClanId)
 route.get("/combat-count", controller.getSwordplayersAndCombatCount)
 route.get("/enabled-swordplayers", controller.getEnabledSwordplayers)
-route.get("/enabled-swordplayers/:id_clan", validateSession, controller.getEnabledPlayersByClan)
-route.get("/stats", validateSession, controller.getAllSwordplayersWithFullClanInfo)
+route.get("/enabled-swordplayers/:id_clan", validateSession, isStaff, controller.getEnabledPlayersByClan)
+route.get("/stats", validateSession, isAdmin, controller.getAllSwordplayersWithFullClanInfo)
 route.get("/:id", controller.getPlayerById)
 route.get("/", controller.getAllPlayers)
 
-route.post("/new", validateSession, controller.postPlayer)
+route.post("/new", validateSession, isStaff, controller.postPlayer)
 
-route.put("/:id", validateSession, controller.putPlayerById)
+route.put("/:id", validateSession, isStaff,  controller.putPlayerById)
 
-route.patch("/enable", validateSession, controller.enablePlayerById)
-route.patch("/disable", validateSession, controller.disablePlayerById)
+route.patch("/enable", validateSession, isAdmin, controller.enablePlayerById)
+route.patch("/disable", validateSession, isStaff, controller.disablePlayerById)
 
-route.delete("/:id", validateSession, controller.deletePlayerById)
+route.delete("/:id", validateSession, isAdmin, controller.deletePlayerById)
 
 
 module.exports = route

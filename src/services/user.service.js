@@ -12,12 +12,21 @@ async function getUsers() {
   return users
 }
 
-async function findUser(username) {
+async function findUserByUsername(username) {
   const user = await repo.selectUserByUsername(username)
   user.clan = {}
   user.clan.id = user.id_clan
   delete user.id_clan
   return user
+}
+
+async function findUserById(id) {
+  const userFound = await repo.selectUserById(id)
+  if(!userFound) return userFound
+  userFound.clan = {}
+  userFound.clan.id = userFound.id_clan
+  delete userFound.id_clan
+  return userFound
 }
 
 async function createUser(full_name, username, passwordHash, id_clan) {
@@ -36,9 +45,10 @@ async function disableUserById(id){
 }
 
 module.exports = {
-  findUser,
+  findUserByUsername,
   createUser,
   getUsers,
   enableUserById,
-  disableUserById
+  disableUserById,
+  findUserById
 }

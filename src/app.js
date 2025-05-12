@@ -32,7 +32,7 @@ app.use("/combat", combatRoutes)
 const weaponRoutes = require("./routes/weapon.route.js")
 app.use("/weapon", validateSession, weaponRoutes)
 
-app.get("/health", validateSession, async (req, res) => {
+app.get("/health", async (req, res) => {
   const healthData = {
     uptime: process.uptime(),
     responseTime: process.hrtime(),

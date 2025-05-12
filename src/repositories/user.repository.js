@@ -16,6 +16,13 @@ async function selectUserByUsername(username) {
   return users[0]
 }
 
+async function selectUserById(id) {
+  const query = `SELECT id, is_leader, is_staff, is_admin, id_clan FROM ${TABLE.user}
+  WHERE id=? AND is_enabled=TRUE`
+  const [users, _] = await db.query(query, [id])
+  return users[0]
+}
+
 async function selectAllUsers() {
   const query = `SELECT us.id id, us.full_name full_name, us.username username, us.is_enabled is_enabled, us.is_leader is_leader, us.is_staff is_staff, is_admin, cl.full_name clan_name, cl.abbreviation clan_abbreviation FROM ${TABLE.user} us
                 INNER JOIN ${TABLE.clan} cl ON cl.id = us.id_clan`
@@ -33,7 +40,8 @@ module.exports = {
   selectUserByUsername,
   insertUser,
   selectAllUsers,
-  updateUserStatusById
+  updateUserStatusById,
+  selectUserById
 }
 
 

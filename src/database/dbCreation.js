@@ -15,7 +15,7 @@ const creationQuery = {
   "sessions": `CREATE TABLE sessions (
     id_user CHAR(36) NOT NULL,
       FOREIGN KEY (id_user) REFERENCES users(id),
-    token VARCHAR(512) NOT NULL
+    token VARCHAR(512) NOT NULL PRIMARY KEY
   );`,
 
   'users': `CREATE TABLE users (
