@@ -1,6 +1,6 @@
 const controller = require("../controllers/swordplayer.controller.js")
 
-const { validateSession, isStaff, isAdmin, isLeader } = require("../middleware/checkSession.middleware.js")
+const { validateSession, isStaff, isAdmin, isLeader } = require("../middleware/session.middleware.js")
 const route = require("express").Router()
 
 route.get("/clan/:id_clan", validateSession, isLeader, controller.getSwordplayersByClanId)

@@ -14,7 +14,7 @@ const creationQuery = {
 
   "sessions": `CREATE TABLE sessions (
     id_user CHAR(36) NOT NULL,
-      FOREIGN KEY (id_user) REFERENCES users(id),
+      FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE,
     token VARCHAR(512) NOT NULL PRIMARY KEY
   );`,
 
@@ -47,8 +47,7 @@ const creationQuery = {
       FOREIGN KEY (id_clan) REFERENCES clans(id) ON DELETE CASCADE,
     is_enabled BOOL NOT NULL DEFAULT TRUE,
     creation_timestamp DATETIME NOT NULL DEFAULT NOW(),
-    id_creator CHAR(36),
-      FOREIGN KEY (id_creator) REFERENCES users(id) ON DELETE CASCADE
+    id_creator CHAR(36)
 );`,
 
   'weapons': `CREATE TABLE weapons (
@@ -71,7 +70,6 @@ const creationQuery = {
     rounds_scored2 INT NOT NULL,
       CHECK (rounds_scored2 > -1),
     id_creator CHAR(36),
-      FOREIGN KEY (id_creator) REFERENCES users(id) ON DELETE CASCADE,
     CHECK (id_swp1 < id_swp2)
 );`
 }

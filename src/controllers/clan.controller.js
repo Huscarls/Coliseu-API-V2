@@ -9,13 +9,14 @@ async function getAllClans(req, res) {
     return res.status(200).json(resObj)
   } catch (err) {
     console.log(err)
-    res.status(500).send()
+    return res.status(500).send()
   }
 }
 
 async function getClanById(req, res) {
   try {
     const { id } = req.params
+    console.log(id)
     if (!id) return res.status(400).send()
     const clan = await clanServ.getClanById(id)
     if (!clan) return res.status(404).send()
@@ -25,7 +26,7 @@ async function getClanById(req, res) {
     return res.status(200).json(resObj)
   } catch (err) {
     console.log(err)
-    res.status(500).send()
+    return res.status(500).send()
   }
 }
 
@@ -38,7 +39,7 @@ async function getClansWithEnabledPlayers(req, res) {
     return res.status(200).json(resObj)
   } catch (err) {
     console.log(err)
-    res.status(500).send()
+    return res.status(500).send()
   }
 }
 
@@ -57,7 +58,7 @@ async function postClan(req, res) {
     return res.status(201).json(resObj)
   } catch (err) {
     console.log(err)
-    res.status(500).send()
+    return res.status(500).send()
   }
 }
 
@@ -74,14 +75,14 @@ async function putClanById(req, res) {
     return res.status(204).json(resObj)
   } catch (err) {
     console.log(err)
-    res.status(500).send()
+    return res.status(500).send()
   }
 }
 
 async function deleteClanById(req, res) {
   try {
     const { id } = req.params
-    if (!id) return res.status(400).json({ message: "Insert a clan id" })
+    if (!id) return res.status(400).json()
     await clanServ.deleteClanById(id)
 
     const resObj = {}
@@ -89,7 +90,7 @@ async function deleteClanById(req, res) {
     res.status(204).json(resObj)
   } catch (err) {
     console.log(err)
-    res.status(500).send()
+    return res.status(500).send()
   }
 }
 

@@ -53,10 +53,10 @@ async function getCombatsByClan(idClan) {
   return combats
 }
 
-async function insertCombat(id_swp1, id_weapon1, rounds_scored1, id_swp2, id_weapon2, rounds_scored2){
-  const query = `INSERT combats (id_swp1, id_weapon1, rounds_scored1, id_swp2, id_weapon2, rounds_scored2)
-  VALUES (?, ?, ?, ?, ?, ?)`
-  await db.query(query, [id_swp1, id_weapon1, rounds_scored1, id_swp2, id_weapon2, rounds_scored2])
+async function insertCombat(id_swp1, id_weapon1, rounds_scored1, id_swp2, id_weapon2, rounds_scored2, userId){
+  const query = `INSERT combats (id_swp1, id_weapon1, rounds_scored1, id_swp2, id_weapon2, rounds_scored2, id_creator)
+  VALUES (?, ?, ?, ?, ?, ?, ?)`
+  await db.query(query, [id_swp1, id_weapon1, rounds_scored1, id_swp2, id_weapon2, rounds_scored2, userId])
   return
 }
 

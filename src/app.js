@@ -12,13 +12,13 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const { validateSession } = require("./middleware/checkSession.middleware.js")
+const { validateSession, isAdmin } = require("./middleware/session.middleware.js")
 
 const authRoutes = require("./routes/auth.route.js")
 app.use("/auth", authRoutes)
 
 const userRoutes = require("./routes/user.route.js")
-app.use("/user", validateSession, userRoutes)
+app.use("/user", validateSession, isAdmin, userRoutes)
 
 const clanRoutes = require("./routes/clan.route.js")
 app.use("/clan", validateSession, clanRoutes)
@@ -40,11 +40,12 @@ app.get("/health", async (req, res) => {
     timestamp: Date.now()
   }
   try {
-    const resObj = {data: healthData}
+    resObj = {data: healthData}
     if(req.newToken) resObj.token = req.newToken
-    res.status(200).json(resObj)
+    return res.status(200).send(resObj)
   } catch (err) {
-    res.status(500).json({ msg: "Not healthy" })
+    console.log(err)
+    return res.status(500).send()
   }
 })
 

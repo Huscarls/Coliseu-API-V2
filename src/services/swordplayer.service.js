@@ -77,8 +77,8 @@ async function getAllSwordplayersWithFullClanInfo() {
   return swordplayers
 }
 
-async function newPlayer(full_name, nickname, id_clan){
-  await repo.insertPlayer(full_name, nickname, id_clan)
+async function newPlayer(full_name, nickname, id_clan, userId){
+  await repo.insertPlayer(full_name, nickname, id_clan, userId)
   return
 }
 

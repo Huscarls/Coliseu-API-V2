@@ -107,9 +107,9 @@ async function getCombatsByClanId(idClan) {
   return combats
 }
 
-async function newCombat(id_swordplayer1, id_weapon1, rounds_scored1, id_swordplayer2, id_weapon2, rounds_scored2){
+async function newCombat(id_swordplayer1, id_weapon1, rounds_scored1, id_swordplayer2, id_weapon2, rounds_scored2, userId){
   if(id_swordplayer1 < id_swordplayer2) await repo.insertCombat(id_swordplayer1, id_weapon1, rounds_scored1, id_swordplayer2, id_weapon2, rounds_scored2);
-  else await repo.insertCombat(id_swordplayer2, id_weapon2, rounds_scored2, id_swordplayer1, id_weapon1, rounds_scored1);
+  else await repo.insertCombat(id_swordplayer2, id_weapon2, rounds_scored2, id_swordplayer1, id_weapon1, rounds_scored1, userId);
   return
 }
 

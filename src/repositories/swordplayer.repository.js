@@ -46,10 +46,10 @@ async function selectSwordplayersByClanId(id_clan){
   return swordplayers
 }
 
-async function insertPlayer(full_name, nickname, id_clan){
-  const query = `INSERT ${TABLE.swordplayer} (full_name, nickname, id_clan)
-  VALUES (?, ?, ?);`
-  await db.query(query, [full_name, nickname, id_clan])
+async function insertPlayer(full_name, nickname, id_clan, userId){
+  const query = `INSERT ${TABLE.swordplayer} (full_name, nickname, id_clan, id_creator)
+  VALUES (?, ?, ?, ?);`
+  await db.query(query, [full_name, nickname, id_clan, userId])
   return 
 }
 

@@ -45,8 +45,7 @@ async function getAllCombatsFromPlayer(req, res) {
 async function getCombatByPlayers(req, res) {
   try {
     const { idSwp1, idSwp2 } = req.query
-    if (!idSwp1) return res.status(400).json()
-    if (!idSwp2) return res.status(400).json()
+    if (!idSwp1 || !idSwp2) return res.status(400).send()
     const combat = await combatServ.getCombatByPlayers(idSwp1, idSwp2)
     if (!combat) return res.status(404).json()
 
@@ -54,14 +53,16 @@ async function getCombatByPlayers(req, res) {
     if(req.newToken) resObj.token = req.newToken
     return res.status(200).json(resObj)
   } catch (err) {
-    res.status(500).json(err.message)
+    console.log(err)
+    res.status(500)
+    return next()
   }
 }
 
 async function getCombatsByClanId(req, res) {
   try {
     const { id_clan } = req.params
-    if(!id_clan) return res.status(400).json()
+    if(!id_clan) return res.status(400).send()
     
     const combat = await combatServ.getCombatsByClanId(id_clan)
     const resObj = {data: combat}
@@ -75,9 +76,9 @@ async function getCombatsByClanId(req, res) {
 
 async function postCombat(req, res) {
   try {
-    const { idSwp1, idWeapon1, roundsScored1, idSwp2, idWeapon2, roundsScored2 } = req.body
+    const { idSwp1, idWeapon1, roundsScored1, idSwp2, idWeapon2, roundsScored2, userId } = req.body
 
-    if(!idSwp1 || !idWeapon1 || !idSwp2 || !idWeapon2) return res.status(400).send()
+    if(!idSwp1 || !idWeapon1 || !idSwp2 || !idWeapon2 || !userId) return res.status(400).send()
     if(idSwp1 == idSwp2 || roundsScored1 == roundsScored2) return res.status(400).send()
       
     const foundCombat = await combatServ.getCombatBySwordplayers(idSwp1, idSwp2)

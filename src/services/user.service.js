@@ -23,15 +23,58 @@ async function findUserByUsername(username) {
 async function findUserById(id) {
   const userFound = await repo.selectUserById(id)
   if(!userFound) return userFound
+  userFound.clan = objService.createClanObject(userFound.clan_name, userFound.clan_abbreviation, userFound.id_clan)
+  delete userFound.clan_name
+  delete userFound.clan_abbreviation
+  delete userFound.id_clan
+  return userFound
+}
+
+async function findUserEnabledById(id) {
+  const userFound = await repo.selectEnabledUserById(id)
+  if(!userFound) return userFound
   userFound.clan = {}
   userFound.clan.id = userFound.id_clan
   delete userFound.id_clan
   return userFound
 }
 
-async function createUser(full_name, username, passwordHash, id_clan) {
+async function createUser(full_name, username, passwordHash, id_clan, profile) {
+  let leader = 0
+  let staff = 0
+  let admin = 0
+  switch (profile) {
+    case "leader":
+      leader = 1
+      break
+    case "staff":
+      staff = 1
+      break
+    case "admin":
+      admin = 1
+      break
+  }
   const id = authServ.createUuid([full_name, username])
-  await repo.insertUser(id, username, passwordHash, full_name, id_clan)
+  await repo.insertUser(id, username, passwordHash, full_name, id_clan, leader, staff, admin)
+}
+
+async function updateUser(id, full_name, username, profile) {
+  let leader = 0
+  let staff = 0
+  let admin = 0
+  switch (profile) {
+    case "leader":
+      leader = 1
+      break
+    case "staff":
+      staff = 1
+      break
+    case "admin":
+      admin = 1
+      break
+  }
+  await repo.updateUser(id, full_name, username, leader, staff, admin)
+  
 }
 
 async function enableUserById(id){
@@ -44,11 +87,25 @@ async function disableUserById(id){
   return
 }
 
+async function changePasswordOverride(id, passwordHash) {
+  await repo.updateUserPassword(id, passwordHash)
+  return
+}
+
+async function deleteUserById(id){
+  await repo.deleteById(id)
+  return
+}
+
 module.exports = {
   findUserByUsername,
   createUser,
   getUsers,
   enableUserById,
   disableUserById,
-  findUserById
+  findUserEnabledById,
+  deleteUserById,
+  updateUser,
+  findUserById,
+  changePasswordOverride
 }
