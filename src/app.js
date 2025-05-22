@@ -12,25 +12,25 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const { validateSession, isAdmin } = require("./middleware/session.middleware.js")
+const { logger, validateSession, isAdmin } = require("./middleware/session.middleware.js")
 
 const authRoutes = require("./routes/auth.route.js")
-app.use("/auth", authRoutes)
+app.use("/auth", logger, authRoutes)
 
 const userRoutes = require("./routes/user.route.js")
-app.use("/user", validateSession, isAdmin, userRoutes)
+app.use("/user", logger, validateSession, isAdmin, userRoutes)
 
 const clanRoutes = require("./routes/clan.route.js")
-app.use("/clan", validateSession, clanRoutes)
+app.use("/clan", logger, validateSession, clanRoutes)
 
 const swordplayerRoutes = require("./routes/swordplayer.route.js")
-app.use("/swordplayer", swordplayerRoutes)
+app.use("/swordplayer", logger, swordplayerRoutes)
 
 const combatRoutes = require("./routes/combat.route.js")
-app.use("/combat", combatRoutes)
+app.use("/combat", logger, combatRoutes)
 
 const weaponRoutes = require("./routes/weapon.route.js")
-app.use("/weapon", validateSession, weaponRoutes)
+app.use("/weapon", logger, validateSession, weaponRoutes)
 
 app.get("/health", async (req, res) => {
   const healthData = {
@@ -45,7 +45,7 @@ app.get("/health", async (req, res) => {
     return res.status(200).send(resObj)
   } catch (err) {
     console.log(err)
-    return res.status(500).send()
+    return res.status(500).json({})
   }
 })
 

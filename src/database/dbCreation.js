@@ -1,6 +1,12 @@
 const { db } = require("./dbConnect.js")
 
+const userService = require("../services/user.service.js")
+const clanService = require("../services/clan.service.js")
+const weaponService = require("../services/weapon.service.js")
+const cripService = require("../services/criptography.service.js")
+
 const TABLES = ["clans", "users", "sessions", "swordplayers", "weapons", "combats"]
+const WEAPONS = ["haste", "dual", "long", "single", "escudo", "arco", "exótica"]
 
 async function getAllNames(){
   
@@ -85,6 +91,8 @@ async function createDatabase(){
       console.log(`Created table: ${table}`)
     }
     console.log("Database online")
+    console.log("Populating database")
+    populateDatabase()
   } catch (err) {
     console.log(err)
     console.log("Please create the database on MySQL manually")
@@ -93,7 +101,39 @@ async function createDatabase(){
 }
 
 async function populateDatabase() {
-  
+  const clan = await clanService.getClanByFullName("shields")
+  if(!clan) await clanService.newClan("shields", "SHD")
+
+  const clans = await clanService.getAllClans()
+  let clanId = ""
+  for(let i = 0; i < clans.length; i++){
+    if(clans[i].full_name == "shields") clanId = clans[i].id
+  }
+
+  const users = await userService.getUsers()
+  let adminId = ""
+  if(users.length > 0){
+    for(let i = 0; i < users.length; i++){
+      if(users[i].full_name == "admin") {
+        adminId = users[i].id
+        break
+      }
+    }
+  }
+  if(!adminId) {
+    console.log("Populating with admin")
+    await userService.createUser("admin", "admin", cripService.hashPassword("1234567890"), clanId, "admin")
+  }
+
+  const weapons = await weaponService.getAllWeapons()
+  if(!(weapons.length >= WEAPONS.length)){
+    for(let i = 0; i < WEAPONS.length; i++){
+      console.log("Populating weapon: " + WEAPONS[i])
+      await weaponService.newWeapon(WEAPONS[i])
+    }
+  }
+
+  console.log("Finished population")
 }
 
 module.exports = {

@@ -15,7 +15,7 @@ async function getClanById(id) {
 
 //TODO
 async function getClanByFullName(full_name) {
-  const query = `SELECT full_name FROM ${TABLE.clan} WHERE id = ?`
+  const query = `SELECT full_name FROM ${TABLE.clan} WHERE full_name = ?`
   const [clan, _] = await db.query(query, [full_name])
   return clan[0]
 }

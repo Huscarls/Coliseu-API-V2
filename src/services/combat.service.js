@@ -107,6 +107,23 @@ async function getCombatsByClanId(idClan) {
   return combats
 }
 
+async function getCombatsBySwordplayers(swp1, swp2) {
+  let combat
+  if(swp1 < swp2) combat = await repo.selectCombatBySwordplayers(swp1, swp2)
+  else combat = await repo.selectCombatBySwordplayers(swp2, swp1)
+  if(!combat) return combat
+
+  combat.swp1 = objService.createSwordplayerObject("", "", "", combat.swp1id)
+  combat.weapon1 = objService.createWeaponObject("", combat.weapon1)
+  combat.swp2 = objService.createSwordplayerObject("", "", "", combat.swp2id)
+  combat.weapon2 = objService.createWeaponObject("", combat.weapon2)
+  
+  delete combat.swp1id
+  delete combat.swp2id
+
+  return combat
+}
+
 async function newCombat(id_swordplayer1, id_weapon1, rounds_scored1, id_swordplayer2, id_weapon2, rounds_scored2, userId){
   if(id_swordplayer1 < id_swordplayer2) await repo.insertCombat(id_swordplayer1, id_weapon1, rounds_scored1, id_swordplayer2, id_weapon2, rounds_scored2);
   else await repo.insertCombat(id_swordplayer2, id_weapon2, rounds_scored2, id_swordplayer1, id_weapon1, rounds_scored1, userId);
@@ -137,5 +154,6 @@ module.exports = {
   deleteCombatById,
   deleteCombatsBySwordplayerId,
   getCombatById,
-  getCombatsByClanId
+  getCombatsByClanId,
+  getCombatsBySwordplayers
 }

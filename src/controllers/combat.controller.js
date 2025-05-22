@@ -9,7 +9,7 @@ async function getAllCombats(req, res) {
     return res.status(200).json(resObj)
   } catch (err) {
     console.log(err)
-    res.status(500).json(err.message)
+    return res.status(500).json(err.message)
   }
 }
 
@@ -17,35 +17,37 @@ async function getCombatById(req, res) {
   try {
     const { id } = req.params
     const combat = await combatServ.getCombatById(id)
-    if(!combat) return res.status(404).send()
+    if(!combat) return res.status(404).json()
 
     const resObj = {data: combat}
     if(req.newToken) resObj.token = req.newToken
     return res.status(200).json(resObj)
   } catch (err) {
-    res.status(500).json(err.message)
+    console.log(err)
+    return res.status(500).json(err.message)
   }
 }
 
 async function getAllCombatsFromPlayer(req, res) {
   try {
     const { id_player } = req.params
-    if(!id_player) return res.status(400).send()
+    if(!id_player) return res.status(400).json({})
     const combats = await combatServ.getSwordplayerCombats(id_player)
-    if(!combats) return res.status(404).send()
+    if(!combats) return res.status(404).json()
 
     const resObj = {data: combats}
     if(req.newToken) resObj.token = req.newToken
     return res.status(200).json(resObj)
   } catch (err) {
-    res.status(500).json(err.message)
+    console.log(err)
+    return res.status(500).json(err.message)
   }
 }
 
 async function getCombatByPlayers(req, res) {
   try {
     const { idSwp1, idSwp2 } = req.query
-    if (!idSwp1 || !idSwp2) return res.status(400).send()
+    if (!idSwp1 || !idSwp2) return res.status(400).json({})
     const combat = await combatServ.getCombatByPlayers(idSwp1, idSwp2)
     if (!combat) return res.status(404).json()
 
@@ -54,15 +56,14 @@ async function getCombatByPlayers(req, res) {
     return res.status(200).json(resObj)
   } catch (err) {
     console.log(err)
-    res.status(500)
-    return next()
+    return res.status(500).json(err.message)
   }
 }
 
 async function getCombatsByClanId(req, res) {
   try {
     const { id_clan } = req.params
-    if(!id_clan) return res.status(400).send()
+    if(!id_clan) return res.status(400).json({})
     
     const combat = await combatServ.getCombatsByClanId(id_clan)
     const resObj = {data: combat}
@@ -70,7 +71,24 @@ async function getCombatsByClanId(req, res) {
     return res.status(200).json(resObj)
 
   } catch (err) {
-    
+    console.log(err)
+    return res.status(500).json(err.message)
+  }
+}
+
+async function getCombatBySwordplayers(req, res) {
+  try {
+    const { swp1, swp2 } = req.params
+    if(!swp1 || !swp2) return res.status(400).json({})
+    const combat = await combatServ.getCombatsBySwordplayers(swp1, swp2)
+    if(!combat) return res.status(404).json({token: req.newToken})
+    const resObj = {data: combat}
+    if(req.newToken) resObj.token = req.newToken
+    return res.status(200).json(resObj)
+
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json(err.message)
   }
 }
 
@@ -78,11 +96,11 @@ async function postCombat(req, res) {
   try {
     const { idSwp1, idWeapon1, roundsScored1, idSwp2, idWeapon2, roundsScored2, userId } = req.body
 
-    if(!idSwp1 || !idWeapon1 || !idSwp2 || !idWeapon2 || !userId) return res.status(400).send()
-    if(idSwp1 == idSwp2 || roundsScored1 == roundsScored2) return res.status(400).send()
+    if(!idSwp1 || !idWeapon1 || !idSwp2 || !idWeapon2 || !userId) return res.status(400).json({})
+    if(idSwp1 == idSwp2 || roundsScored1 == roundsScored2) return res.status(400).json({})
       
     const foundCombat = await combatServ.getCombatBySwordplayers(idSwp1, idSwp2)
-    if(foundCombat) return res.status(409).send()
+    if(foundCombat) return res.status(409).json({})
     await combatServ.newCombat(idSwp1, idWeapon1, roundsScored1, idSwp2, idWeapon2, roundsScored2)
 
     const resObj = {}
@@ -90,7 +108,7 @@ async function postCombat(req, res) {
     return res.status(201).json(resObj)
   } catch (err) {
     console.log(err)
-    res.status(500).json(err.message)
+    return res.status(500).json(err.message)
   }
 }
 
@@ -104,21 +122,23 @@ async function patchCombatById(req, res) {
     if(req.newToken) resObj.token = req.newToken
     return res.status(200).json(resObj)
   } catch (err) {
-    res.status(500).json(err.message)
+    console.log(err)
+    return res.status(500).json(err.message)
   }
 }
 
 async function deleteCombatById(req, res) {
   try {
     const { id } = req.params
-    if(!id) return res.status(400).send()
+    if(!id) return res.status(400).json({})
     await combatServ.deleteCombatById(id)
 
     const resObj = {}
     if(req.newToken) resObj.token = req.newToken
     return res.status(200).json(resObj)
   } catch (err) {
-    res.status(500).json(err.message)
+    console.log(err)
+    return res.status(500).json(err.message)
   }
 }
 
@@ -130,5 +150,6 @@ module.exports = {
   patchCombatById,
   deleteCombatById,
   getCombatById,
-  getCombatsByClanId
+  getCombatsByClanId,
+  getCombatBySwordplayers
 }

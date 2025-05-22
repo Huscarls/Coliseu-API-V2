@@ -14,6 +14,7 @@ async function getUsers() {
 
 async function findUserByUsername(username) {
   const user = await repo.selectUserByUsername(username)
+  if(!user) return user
   user.clan = {}
   user.clan.id = user.id_clan
   delete user.id_clan

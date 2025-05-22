@@ -5,7 +5,7 @@ const route = require("express").Router()
 
 route.post("/new", isAdmin, controller.postClan)
 
-route.get("/withEnabledSwordplayers", isStaff, controller.getClansWithEnabledPlayers)
+route.get("/with-enabled-swordplayers", isStaff, controller.getClansWithEnabledPlayers)
 route.get("/:id", isLeader, controller.getClanById)
 route.get("/", isStaff, controller.getAllClans)
 

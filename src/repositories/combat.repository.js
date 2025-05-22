@@ -53,6 +53,17 @@ async function getCombatsByClan(idClan) {
   return combats
 }
 
+async function selectCombatBySwordplayers(swp1, swp2) {
+  const query = `SELECT cbt.id id, swp1.id swp1id, cbt.rounds_scored1 roundsScored1, wp1.name weapon1, swp2.id swp2id, cbt.rounds_scored2 roundsScored2, wp2.name weapon2 FROM ${TABLE.combat} cbt
+  INNER JOIN ${TABLE.swordplayer} swp1 ON cbt.id_swp1 = swp1.id
+  INNER JOIN ${TABLE.swordplayer} swp2 ON cbt.id_swp2 = swp2.id
+  INNER JOIN ${TABLE.weapon} wp1 ON cbt.id_weapon1 = wp1.id
+  INNER JOIN ${TABLE.weapon} wp2 ON cbt.id_weapon2 = wp2.id
+  WHERE id_swp1 = ? AND id_swp2 = ?`
+  const [combat, _] = await db.query(query, [swp1, swp2])
+  return combat[0]
+}
+
 async function insertCombat(id_swp1, id_weapon1, rounds_scored1, id_swp2, id_weapon2, rounds_scored2, userId){
   const query = `INSERT combats (id_swp1, id_weapon1, rounds_scored1, id_swp2, id_weapon2, rounds_scored2, id_creator)
   VALUES (?, ?, ?, ?, ?, ?, ?)`
@@ -80,5 +91,6 @@ module.exports = {
   insertCombat,
   updateCombatById,
   deleteCombatById,
-  getCombatsByClan
+  getCombatsByClan,
+  selectCombatBySwordplayers
 }

@@ -8,7 +8,8 @@ async function getAllWeapons(req, res) {
     if(req.newToken) resObj.token = req.newToken
     return res.status(200).json(resObj)
   } catch (err) {
-    res.status(500).json(err.message)
+    console.log(err)
+    return res.status(500).json(err.message)
   }
 }
 
@@ -21,7 +22,8 @@ async function getWeaponById(req, res) {
     if(req.newToken) resObj.token = req.newToken
     return res.status(200).json(resObj)
   } catch (err) {
-    res.status(500).json(err.message)
+    console.log(err)
+    return res.status(500).json(err.message)
   }
 }
 
@@ -34,7 +36,8 @@ async function postWeapon(req, res) {
     if(req.newToken) resObj.token = req.newToken
     return res.status(201).json(resObj)
   } catch (err) {
-    res.status(500).json(err.message)
+    console.log(err)
+    return res.status(500).json(err.message)
   }
 }
 
