@@ -10,7 +10,9 @@ const cors = require("cors")
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin:"https://huscarls.github.io"
+}));
 
 const { logger, validateSession, isAdmin } = require("./middleware/session.middleware.js")
 
