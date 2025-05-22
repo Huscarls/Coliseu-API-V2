@@ -34,7 +34,7 @@ app.use("/combat", logger, combatRoutes)
 const weaponRoutes = require("./routes/weapon.route.js")
 app.use("/weapon", logger, validateSession, weaponRoutes)
 
-app.get("/health", async (req, res) => {
+app.get("/health", validateSession, isAdmin, async (req, res) => {
   const healthData = {
     uptime: process.uptime(),
     responseTime: process.hrtime(),
@@ -49,6 +49,10 @@ app.get("/health", async (req, res) => {
     console.log(err)
     return res.status(500).json({})
   }
+})
+
+app.get("/cron-job", async (req, res) => {
+  return res.status(299).send()
 })
 
 module.exports = app

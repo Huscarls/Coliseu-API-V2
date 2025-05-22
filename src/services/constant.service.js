@@ -7,6 +7,9 @@ const TABLE = {
   session:"sessions",
 }
 
+const MAX_ROUNDS = 5
+
 module.exports = {
-  TABLE
+  TABLE,
+  MAX_ROUNDS
 }
