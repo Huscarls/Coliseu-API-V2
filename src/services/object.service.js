@@ -24,8 +24,11 @@ function createWeaponObject(id, name){
   return weapon
 }
 
-function createSwordplayerStatsObject(combatsDone){
+function createSwordplayerStatsObject(roundsScored, roundsPlayed, combatsWon, combatsDone){
   const stats = {
+    roundsScored,
+    roundsPlayed,
+    combatsWon,
     combatsDone
   }
   return stats

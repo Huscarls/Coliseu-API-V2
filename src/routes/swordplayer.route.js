@@ -7,7 +7,8 @@ route.get("/clan/:id_clan", validateSession, isLeader, controller.getSwordplayer
 route.get("/combat-count", controller.getSwordplayersAndCombatCount)
 route.get("/enabled-swordplayers", controller.getEnabledSwordplayers)
 route.get("/enabled-swordplayers/:id_clan", validateSession, isStaff, controller.getEnabledPlayersByClan)
-route.get("/stats", validateSession, isAdmin, controller.getAllSwordplayersWithFullClanInfo)
+route.get("/full-info", validateSession, isAdmin, controller.getAllSwordplayersWithFullClanInfo)
+route.get("/stats", validateSession, isAdmin, controller.getAllSwordplayersWithStats)
 route.get("/:id", controller.getPlayerById)
 route.get("/", controller.getAllPlayers)
 

@@ -60,7 +60,7 @@ async function getSwordplayersAndCombatCount() {
     delete swordplayers[i].clan_name
     delete swordplayers[i].clan_abbreviation
 
-    swordplayers[i].stats = objService.createSwordplayerStatsObject(swordplayers[i].combatsDone)
+    swordplayers[i].stats = objService.createSwordplayerStatsObject(0, 0, 0, swordplayers[i].combatsDone)
     delete swordplayers[i].combatsDone
   }
   return swordplayers
@@ -101,6 +101,41 @@ async function deletePlayerById(id){
   await repo.deletePlayerById(id)
 }
 
+function mapSwpList(swordplayers){
+    const swpListMap = {} 
+    for(let i = 0; i < swordplayers.length; i++){
+      const id = swordplayers[i].id
+      swpListMap[id] = i
+    }
+    return swpListMap
+}
+
+function insertStatsInSwordplayers(swordplayers, combats){
+    const swpMap = mapSwpList(swordplayers)
+    for(let i = 0; i < swordplayers.length; i++) swordplayers[i].stats = { roundsScored: 0, roundsPlayed: 0, combatsDone: 0, combatsWon: 0 }
+    
+    for(let i = 0; i < combats.length; i++){
+      try {
+        const index1 = swpMap[combats[i].swp1.id]
+        swordplayers[index1].stats.roundsScored += combats[i].roundsScored1
+        swordplayers[index1].stats.roundsPlayed += combats[i].roundsScored1 + combats[i].roundsScored2
+        
+        swordplayers[index1].stats.combatsDone += 1
+        if(combats[i].roundsScored1 > combats[i].roundsScored2) swordplayers[index1].stats.combatsWon += 1
+      } catch {}
+      
+      try {
+        const index2 = swpMap[combats[i].swp2.id]
+        swordplayers[index2].stats.roundsScored += combats[i].roundsScored2
+        swordplayers[index2].stats.roundsPlayed += combats[i].roundsScored1 + combats[i].roundsScored2
+        
+        swordplayers[index2].stats.combatsDone += 1
+        if(combats[i].roundsScored1 < combats[i].roundsScored2) swordplayers[index2].stats.combatsWon += 1
+      } catch {}
+    }
+    return swordplayers
+
+}
 
 module.exports = {
   getAllPlayers,
@@ -115,5 +150,6 @@ module.exports = {
   deletePlayerById,
   getSwordplayersAndCombatCount,
   getEnabledSwordplayers,
-  getAllSwordplayersWithFullClanInfo
+  getAllSwordplayersWithFullClanInfo,
+  insertStatsInSwordplayers
 }
