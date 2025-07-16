@@ -25,7 +25,7 @@ async function getAllCombats(){
     delete combats[i].clanAbbreviation1
     delete combats[i].clanAbbreviation2
   }
-  
+    
   return combats
 }
 
@@ -125,13 +125,14 @@ async function getCombatsBySwordplayers(swp1, swp2) {
 }
 
 async function newCombat(id_swordplayer1, id_weapon1, rounds_scored1, id_swordplayer2, id_weapon2, rounds_scored2, userId){
-  if(id_swordplayer1 < id_swordplayer2) await repo.insertCombat(id_swordplayer1, id_weapon1, rounds_scored1, id_swordplayer2, id_weapon2, rounds_scored2);
+  console.log(userId)
+  if(id_swordplayer1 < id_swordplayer2) await repo.insertCombat(id_swordplayer1, id_weapon1, rounds_scored1, id_swordplayer2, id_weapon2, rounds_scored2, userId);
   else await repo.insertCombat(id_swordplayer2, id_weapon2, rounds_scored2, id_swordplayer1, id_weapon1, rounds_scored1, userId);
   return
 }
 
-async function updateCombatById(id, id_weapon1, rounds_scored1, id_weapon2, rounds_scored2){
-  await repo.updateCombatById(id, id_weapon1, rounds_scored1, id_weapon2, rounds_scored2)
+async function updateCombatById(id, id_weapon1, rounds_scored1, id_weapon2, rounds_scored2, userId){
+  await repo.updateCombatById(id, id_weapon1, rounds_scored1, id_weapon2, rounds_scored2, userId)
   return
 }
 

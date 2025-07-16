@@ -53,7 +53,8 @@ const creationQuery = {
       FOREIGN KEY (id_clan) REFERENCES clans(id) ON DELETE CASCADE,
     is_enabled BOOL NOT NULL DEFAULT TRUE,
     creation_timestamp DATETIME NOT NULL DEFAULT NOW(),
-    id_creator CHAR(36)
+    id_creator CHAR(36) NOT NULL,
+    id_staff_disable CHAR(36)
 );`,
 
   'weapons': `CREATE TABLE weapons (
@@ -75,7 +76,7 @@ const creationQuery = {
       FOREIGN KEY (id_weapon2) REFERENCES weapons(id) ON DELETE CASCADE,
     rounds_scored2 INT NOT NULL,
       CHECK (rounds_scored2 > -1),
-    id_creator CHAR(36),
+    id_creator CHAR(36) NOT NULL,
     CHECK (id_swp1 < id_swp2)
 );`
 }

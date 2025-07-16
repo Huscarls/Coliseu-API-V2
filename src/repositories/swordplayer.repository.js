@@ -33,8 +33,9 @@ async function getAllSwordplayersWithFullClanInfo(){
 }
 
 async function getPlayerById(id){
-  const query = `SELECT swp.id, swp.nickname nickname, swp.full_name full_name, swp.is_enabled is_enabled, swp.id_clan clan_id, cl.full_name clan_name, cl.abbreviation clan_abbreviation FROM ${TABLE.swordplayer} swp
+  const query = `SELECT swp.id, swp.nickname nickname, swp.full_name full_name, swp.is_enabled is_enabled, swp.id_clan clan_id, cl.full_name clan_name, cl.abbreviation clan_abbreviation, us.username disabler FROM ${TABLE.swordplayer} swp
   INNER JOIN ${TABLE.clan} cl ON cl.id = swp.id_clan
+  LEFT JOIN ${TABLE.user} us on us.id = swp.id_staff_disable
   WHERE swp.id = ?;`
   const [swordplayers, _] = await db.query(query, [id])
   return swordplayers[0]
@@ -65,9 +66,9 @@ async function enablePlayerById(id){
   return
 }
 
-async function disablePlayerById(id){
-  const query = `UPDATE ${TABLE.swordplayer} SET is_enabled = false WHERE id = ?`
-  await db.query(query, [id])
+async function disablePlayerById(id, userId){
+  const query = `UPDATE ${TABLE.swordplayer} SET is_enabled = false, id_staff_disable = ? WHERE id = ?`
+  await db.query(query, [userId, id])
   return
 }
 

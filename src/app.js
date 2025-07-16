@@ -11,10 +11,10 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-  origin:"https://huscarls.github.io"
+  // origin:"https://huscarls.github.io"
 }));
 
-const { logger, validateSession, isAdmin } = require("./middleware/session.middleware.js")
+const { logger, validateSession, isAdmin, isStaff } = require("./middleware/session.middleware.js")
 
 const authRoutes = require("./routes/auth.route.js")
 app.use("/auth", logger, authRoutes)
@@ -32,7 +32,7 @@ const combatRoutes = require("./routes/combat.route.js")
 app.use("/combat", logger, combatRoutes)
 
 const weaponRoutes = require("./routes/weapon.route.js")
-app.use("/weapon", logger, validateSession, weaponRoutes)
+app.use("/weapon", logger, validateSession, isStaff, weaponRoutes)
 
 app.get("/health", validateSession, isAdmin, async (req, res) => {
   const healthData = {

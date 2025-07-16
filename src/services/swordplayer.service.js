@@ -92,8 +92,8 @@ async function enablePlayerById(id){
   return
 }
 
-async function disablePlayerById(id){
-  await repo.disablePlayerById(id)
+async function disablePlayerById(id, userId){
+  await repo.disablePlayerById(id, userId)
   return
 }
 
