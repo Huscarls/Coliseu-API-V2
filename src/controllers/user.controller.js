@@ -129,6 +129,35 @@ async function changePasswordOverride(req,res) {
   }
 }
 
+async function changePassword(req, res) {
+  try {
+    const resObj = {}
+    if(req.newToken) resObj.token = req.newToken
+
+    
+    const { id } = req.params
+    if(!id) return res.status(400).json(resObj)
+      
+      const token = req.headers["authorization"].split(" ")[1]
+      const usersSession = await sessionServ.userOwnsToken(id, token)
+      
+      if(!usersSession) return res.status(401).json({})
+        
+        const { password } = req.body
+        if(!password || password.length < 8) return res.status(400).json(resObj)
+          
+    const passwordHash = cripServ.hashPassword(password)
+    await userServ.changePasswordOverride(id, passwordHash)
+
+    await sessionServ.logoffAllSessions(id)
+
+    return res.status(200).json(resObj)
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json({})
+  }
+}
+
 async function deleteUser(req, res) {
   try {
     const resObj = {}
@@ -153,5 +182,6 @@ module.exports = {
   deleteUser,
   updateUser,
   getUser,
+  changePassword,
   changePasswordOverride
 }

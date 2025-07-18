@@ -84,19 +84,6 @@ async function isLeader(req,res,next) {
   }
 }
 
-async function insertToken(req, res) {
-  try{
-    const resObj = {}
-    if(req.stsCode < 400 && req.resData) resObj.data = req.resData
-    if(req.newToken) resObj.token = req.newToken
-    return res.status(req.stsCode).json(resObj)
-  }
-  catch(err){
-    console.log(err)
-    return res.status(500).json({})
-  }
-}
-
 async function logger(req, res, next) {
   console.log(req.originalUrl)
   return next()
@@ -107,7 +94,6 @@ module.exports = {
   isAdmin,
   isStaff,
   isLeader,
-  insertToken,
   logger
 }
 

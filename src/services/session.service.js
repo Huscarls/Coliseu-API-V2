@@ -38,6 +38,12 @@ async function updateToken(userId, oldToken, newToken) {
   await repo.updateSession(userId, oldToken, newToken)
 }
 
+async function userOwnsToken(userId, token) {
+  const usersToken = await repo.selectByUserIdAndToken(userId, token)
+  if(usersToken) return true
+  return false
+}
+
 module.exports = {
   getToken,
   validateToken,
@@ -45,5 +51,6 @@ module.exports = {
   validatePreviousSession,
   logoffAllSessions,
   updateToken,
-  logout
+  logout,
+  userOwnsToken
 }

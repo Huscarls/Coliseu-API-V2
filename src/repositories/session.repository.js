@@ -31,10 +31,17 @@ async function updateSession(userId, oldToken, newToken) {
   await db.query(query, [newToken, userId, oldToken])
 }
 
+async function selectByUserIdAndToken(userId, token) {
+  const query = `SELECT * FROM ${TABLE.session} WHERE id_user = ? AND token = ?`
+  const [sessions, _] = await db.query(query, [userId, token])
+  return sessions[0]
+}
+
 module.exports = {
   insertToken,
   findSession,
   deleteSessionsFromUser,
   updateSession,
-  deleteSessionFromToken
+  deleteSessionFromToken,
+  selectByUserIdAndToken
 }
