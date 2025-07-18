@@ -4,14 +4,15 @@ const cripServ = require("../services/criptography.service.js")
 
 async function createUser(req, res) {
   try {
+    const resObj = {}
+    if(req.newToken) resObj.token = req.newToken
+
     const { full_name, username, password, id_clan, profile } = req.body
     if (!full_name || !username || !password || !id_clan || !profile) return res.status(400).json({})
-    if (!String(full_name).trim() || !String(username).trim() || !String(password).trim()) return res.status(400).json({})
+    if (!String(full_name).trim() || !String(username).trim() || !String(password).trim()) return res.status(400).json(resObj)
     const passwordHash = cripServ.hashPassword(password)
     await userServ.createUser(full_name.trim(), username.trim(), passwordHash, id_clan, profile)
 
-    const resObj = {}
-    if(req.newToken) resObj.token = req.newToken
     return res.status(201).json(resObj)
   } catch (err) {
     console.log(err)
@@ -21,11 +22,11 @@ async function createUser(req, res) {
 
 async function getUsers(req, res) {
   try {
+    const resObj = {data: users}
+    if(req.newToken) resObj.token = req.newToken
 
     const users = await userServ.getUsers()
     
-    const resObj = {data: users}
-    if(req.newToken) resObj.token = req.newToken
     return res.status(200).json(resObj)
 
   } catch (err) {
@@ -36,13 +37,15 @@ async function getUsers(req, res) {
 
 async function getUser(req, res) {
   try {
-    const { id } = req.params
-    if(!id) return res.status(400).json({})
-    const user = await userServ.findUserById(id)
-    if(!user) return res.status(404).json({})
-
-    const resObj = {data: user}
+    const resObj = {}
     if(req.newToken) resObj.token = req.newToken
+    const { id } = req.params
+    if(!id) return res.status(400).json(resObj)
+    const user = await userServ.findUserById(id)
+    if(!user) return res.status(404).json(resObj)
+
+    resObj.data = user
+
     return res.status(200).json(resObj)
 
   } catch (err) {
@@ -53,12 +56,13 @@ async function getUser(req, res) {
 
 async function enableUserById(req, res) {
   try {
-    const { id } = req.body
-    if(!id) return res.status(400).json({})
-    await userServ.enableUserById(id)
 
     const resObj = {}
     if(req.newToken) resObj.token = req.newToken
+    const { id } = req.body
+    if(!id) return res.status(400).json(resObj)
+      
+    await userServ.enableUserById(id)
     return res.status(200).json(resObj)
   } catch (err) {
     console.log(err)
@@ -68,12 +72,14 @@ async function enableUserById(req, res) {
 
 async function disableUserById(req, res) {
   try {
-    const { id } = req.body
-    if(!id) return res.status(400).json({})
-    await userServ.disableUserById(id)
 
     const resObj = {}
     if(req.newToken) resObj.token = req.newToken
+
+    const { id } = req.body
+    if(!id) return res.status(400).json(resObj)
+    await userServ.disableUserById(id)
+
     return res.status(200).json(resObj)
   } catch (err) {
     console.log(err)
@@ -83,15 +89,16 @@ async function disableUserById(req, res) {
 
 async function updateUser(req, res) {
   try {
+    const resObj = {}
+    if(req.newToken) resObj.token = req.newToken
+
     const { id } = req.params
-    if(!id) return res.status(400).json({})
+    if(!id) return res.status(400).json(resObj)
     const { full_name, username, profile } = req.body
-    if(!full_name || !username || !profile) return res.status(400).json({})
+    if(!full_name || !username || !profile) return res.status(400).json(resObj)
 
     await userServ.updateUser(id, full_name, username, profile)
 
-    const resObj = {}
-    if(req.newToken) resObj.token = req.newToken
     return res.status(200).json(resObj)
 
   } catch (err) {
@@ -102,18 +109,19 @@ async function updateUser(req, res) {
 
 async function changePasswordOverride(req,res) {
   try {
+    const resObj = {}
+    if(req.newToken) resObj.token = req.newToken
+
     const { id } = req.params
-    if(!id) return res.status(400).json({})
+    if(!id) return res.status(400).json(resObj)
     const { password } = req.body
-    if(!password || password.length < 8) return res.status(400).json({})
+    if(!password || password.length < 8) return res.status(400).json(resObj)
 
     const passwordHash = cripServ.hashPassword(password)
     await userServ.changePasswordOverride(id, passwordHash)
 
     await sessionServ.logoffAllSessions(id)
 
-    const resObj = {}
-    if(req.newToken) resObj.token = req.newToken
     return res.status(200).json(resObj)
   } catch (err) {
     console.log(err)
@@ -123,12 +131,13 @@ async function changePasswordOverride(req,res) {
 
 async function deleteUser(req, res) {
   try {
-    const { id } = req.params
-    if(!id) return res.status(400).json({})
-    await userServ.deleteUserById(id)
-
     const resObj = {}
     if(req.newToken) resObj.token = req.newToken
+
+    const { id } = req.params
+    if(!id) return res.status(400).json(resObj)
+    await userServ.deleteUserById(id)
+
     return res.status(200).json(resObj)
   } catch (err) {
     console.log(err)

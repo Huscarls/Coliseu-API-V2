@@ -20,7 +20,7 @@ const authRoutes = require("./routes/auth.route.js")
 app.use("/auth", logger, authRoutes)
 
 const userRoutes = require("./routes/user.route.js")
-app.use("/user", logger, validateSession, isAdmin, userRoutes)
+app.use("/user", logger, validateSession, userRoutes)
 
 const clanRoutes = require("./routes/clan.route.js")
 app.use("/clan", logger, validateSession, clanRoutes)
