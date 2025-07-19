@@ -8,7 +8,7 @@ async function createUser(req, res) {
     if(req.newToken) resObj.token = req.newToken
 
     const { full_name, username, password, id_clan, profile } = req.body
-    if (!full_name || !username || !password || !id_clan || !profile) return res.status(400).json({})
+    if (!full_name || !username || !password || !id_clan || !profile) return res.status(400).json(resObj)
     if (!String(full_name).trim() || !String(username).trim() || !String(password).trim()) return res.status(400).json(resObj)
     const passwordHash = cripServ.hashPassword(password)
     await userServ.createUser(full_name.trim(), username.trim(), passwordHash, id_clan, profile)
@@ -25,8 +25,8 @@ async function getUsers(req, res) {
     const resObj = {}
     if(req.newToken) resObj.token = req.newToken
 
-    resObj.data = users
     const users = await userServ.getUsers()
+    resObj.data = users
     
     return res.status(200).json(resObj)
 
