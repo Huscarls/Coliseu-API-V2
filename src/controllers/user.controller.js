@@ -141,7 +141,7 @@ async function changePassword(req, res) {
       const token = req.headers["authorization"].split(" ")[1]
       const usersSession = await sessionServ.userOwnsToken(id, token)
       
-      if(!usersSession) return res.status(401).json({})
+      if(!usersSession) return res.status(401).json(resObj)
         
         const { password } = req.body
         if(!password || password.length < 8) return res.status(400).json(resObj)
