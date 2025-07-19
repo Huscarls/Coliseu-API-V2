@@ -22,9 +22,10 @@ async function createUser(req, res) {
 
 async function getUsers(req, res) {
   try {
-    const resObj = {data: users}
+    const resObj = {}
     if(req.newToken) resObj.token = req.newToken
 
+    resObj.data = users
     const users = await userServ.getUsers()
     
     return res.status(200).json(resObj)
