@@ -7,8 +7,8 @@ route.post("/new", isAdmin, controller.postClan)
 
 route.get("/with-enabled-swordplayers", isStaff, controller.getClansWithEnabledPlayers)
 route.get("/:id", isLeader, controller.getClanById)
-route.get("/", controller.getAllClans)
-// route.get("/", isStaff, controller.getAllClans)
+// route.get("/", controller.getAllClans)
+route.get("/", isStaff, controller.getAllClans)
 
 route.put("/:id", isAdmin, controller.putClanById)
 
